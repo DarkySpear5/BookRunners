@@ -13,15 +13,17 @@ Run the installer, click through, done — no Python, no dependencies, nothing e
 - Manual play/pause reading timer per book, with autosave
 - A personal bookshelf: add books, sort by title/author/rating/last read, filter by genre
 - Author, genre tags, notes, and a 1–5 star rating per book
+- Manually add reading time you tracked elsewhere (another app, a physical stopwatch), with an optional note
 - Mark books as Finished and see your stats in the Library Log tab
 - Custom cover image and background per book
 - Five cozy/neutral color themes (Cozy Cottage, Blush Library, Sage & Linen, Lavender Dusk, Warm Oak) plus full custom colors and fonts
+- 10 languages: English, French, Spanish, Russian, Japanese, Korean, Italian, German, Portuguese (Brazil), Chinese (Simplified) — switch anytime in Settings → Language
 - Optional system tray icon, launch-at-startup, export/import individual books
 - Everything is stored locally in a plain JSON file next to the app — no account, no internet required
 
 ## Building from source
 
-The full source is just one file, [`bookrunners.py`](bookrunners.py). To run it directly:
+The full source is two files, [`bookrunners.py`](bookrunners.py) (the app) and [`translations.py`](translations.py) (all UI strings for every language). To run it directly:
 
 ```bash
 pip install pillow pystray

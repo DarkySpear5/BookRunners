@@ -30,7 +30,7 @@
 ; to write there. The suggested default avoids this entirely.
 
 #define MyAppName "BookRunners"
-#define MyAppVersion "1.0"
+#define MyAppVersion "1.1"
 #define MyAppExeName "BookRunners.exe"
 
 [Setup]
