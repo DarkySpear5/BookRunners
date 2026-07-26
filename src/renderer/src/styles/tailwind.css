@@ -1,0 +1,47 @@
+@import 'tailwindcss';
+@import './theme.css';
+
+@theme {
+  --color-bg: var(--br-bg);
+  --color-panel: var(--br-panel);
+  --color-card: var(--br-card);
+  --color-text: var(--br-text);
+  --color-subtext: var(--br-subtext);
+  --color-accent: var(--br-accent);
+  --color-green: var(--br-green);
+  --color-red: var(--br-red);
+  --color-gold: var(--br-gold);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  /*
+   * Every theme gets this same gradient treatment "for free" — it's a
+   * formula over each theme's own bg/panel/accent variables, not a
+   * hand-authored gradient per preset, so switching themes (or editing the
+   * custom color picker) just recomputes it automatically. The bottom stop
+   * deliberately mixes in black (not just var(--br-panel) alone) so there's
+   * always real contrast even for themes/custom palettes where bg and panel
+   * happen to be nearly the same shade.
+   */
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--br-accent) 32%, var(--br-bg)) 0%,
+    var(--br-bg) 38%,
+    color-mix(in srgb, black 30%, var(--br-panel)) 100%
+  );
+  background-attachment: fixed;
+  color: var(--br-text);
+  font-family:
+    'Georgia',
+    -apple-system,
+    sans-serif;
+  overflow: hidden;
+  user-select: none;
+}

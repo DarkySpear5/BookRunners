@@ -1,0 +1,21 @@
+/*
+ * Runtime-switchable theme values. These are plain custom properties (not
+ * Tailwind config) because themes change at runtime (5 cottage presets + a
+ * live custom color picker) — Tailwind's @theme block below just maps
+ * utility classes onto these variables so `bg-bg`/`text-accent`/etc. stay
+ * reactive without a rebuild. settingsStore pushes the active theme's
+ * colors here by setting these on :root whenever the theme changes.
+ */
+:root {
+  --br-bg: #f4e9dc;
+  --br-panel: #e8d9c5;
+  --br-card: #fbf3e7;
+  --br-text: #4a3428;
+  --br-subtext: #8a6f5c;
+  --br-accent: #c97b5f;
+
+  /* Functional colors — never themeable (reading/paused/finished state). */
+  --br-green: #8fae7a;
+  --br-red: #d98a7a;
+  --br-gold: #e0b354;
+}

@@ -1,0 +1,26 @@
+appId: com.darkyspear5.bookrunners2
+productName: Book Runners
+directories:
+  output: release
+  buildResources: build
+files:
+  - out/**/*
+  - package.json
+asarUnpack:
+  - resources/**
+win:
+  target: nsis
+  icon: build/icon.ico
+  artifactName: BookRunners-Setup-${version}.exe
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+publish:
+  provider: github
+  owner: DarkySpear5
+  repo: BookRunners
+  releaseType: release
