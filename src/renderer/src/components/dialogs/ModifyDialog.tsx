@@ -401,14 +401,12 @@ function NotesTab({ profile }: { profile: Profile }): React.JSX.Element {
   )
 }
 
-/** A little hidden dedication — not part of the localized UI on purpose. */
+/** A little hidden dedication — translated like everything else, so it reads right no matter her language setting. */
 function DedicationModal({ onClose }: { onClose: () => void }): React.JSX.Element {
+  const { t } = useTranslation()
   return (
-    <Modal title="A little note" onClose={onClose} width="max-w-sm">
-      <p className="text-center text-sm leading-relaxed text-text">
-        This message is for Marie, my ultimate love. The one that I can&apos;t stop thinking about. The one that
-        loves to read Robin Hobb. ♥
-      </p>
+    <Modal title={t('dedication_title')} onClose={onClose} width="max-w-sm">
+      <p className="text-center text-sm leading-relaxed text-text">{t('dedication_message')}</p>
     </Modal>
   )
 }

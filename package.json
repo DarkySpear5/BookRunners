@@ -1,6 +1,6 @@
 {
   "name": "bookrunners",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Book Runners — a cozy reading tracker",
   "main": "./out/main/index.js",
   "author": "DarkySpear5",

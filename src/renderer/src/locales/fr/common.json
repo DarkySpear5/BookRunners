@@ -77,6 +77,8 @@
   "ctx_modify": "Modifier",
   "ctx_rename": "Renommer",
   "ctx_reset_time": "Réinitialiser le temps",
+  "dedication_message": "Ce message est pour Marie, mon amour ultime. Celle à qui je ne peux pas arrêter de penser. Celle qui aime lire Robin Hobb. ♥",
+  "dedication_title": "Un petit mot",
   "default_imported_book_name": "Livre importé",
   "dlg_add_book_prompt": "Titre du livre :",
   "dlg_add_book_title": "Ajouter un livre",

@@ -77,6 +77,8 @@
   "ctx_modify": "수정",
   "ctx_rename": "이름 변경",
   "ctx_reset_time": "시간 초기화",
+  "dedication_message": "이 메시지는 마리에게 보내는 거야. 나의 궁극의 사랑. 계속 생각하지 않을 수 없는 사람. 로빈 홉 읽는 걸 좋아하는 사람. ♥",
+  "dedication_title": "작은 쪽지",
   "default_imported_book_name": "가져온 책",
   "dlg_add_book_prompt": "책 제목:",
   "dlg_add_book_title": "책 추가",

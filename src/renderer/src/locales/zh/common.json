@@ -77,6 +77,8 @@
   "ctx_modify": "修改",
   "ctx_rename": "重命名",
   "ctx_reset_time": "重置时间",
+  "dedication_message": "这条信息是给玛丽的，我最深爱的人。那个让我无法停止思念的人。那个喜欢读罗宾·霍布的人。♥",
+  "dedication_title": "一个小小的留言",
   "default_imported_book_name": "已导入的书籍",
   "dlg_add_book_prompt": "书名：",
   "dlg_add_book_title": "添加书籍",

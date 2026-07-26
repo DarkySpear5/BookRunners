@@ -77,6 +77,8 @@
   "ctx_modify": "編集",
   "ctx_rename": "名前を変更",
   "ctx_reset_time": "時間をリセット",
+  "dedication_message": "このメッセージはマリーへ。僕の最愛の人。ずっと考えずにはいられない人。ロビン・ホブを読むのが好きな人。♥",
+  "dedication_title": "ちょっとしたメモ",
   "default_imported_book_name": "インポートされた本",
   "dlg_add_book_prompt": "本のタイトル：",
   "dlg_add_book_title": "本を追加",
