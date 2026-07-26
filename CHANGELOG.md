@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.1
+
+- Added new content in author
+
 ## v2.0.0 — Electron rewrite
 
 A full rewrite from Python/Tkinter to Electron/TypeScript/React, on the new `v2` branch. `master` (v1.1) stays available as the lightweight edition.

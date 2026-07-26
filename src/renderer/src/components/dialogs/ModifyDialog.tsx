@@ -53,6 +53,7 @@ function GeneralTab({ profile, onClose }: { profile: Profile; onClose: () => voi
   const { t } = useTranslation()
   const [newName, setNewName] = useState(profile.name)
   const [author, setAuthor] = useState(profile.author)
+  const [showDedication, setShowDedication] = useState(false)
 
   const STATUS_OPTIONS: { value: Status; label: string }[] = [
     { value: 'reading', label: t('status_reading') },
@@ -74,6 +75,10 @@ function GeneralTab({ profile, onClose }: { profile: Profile; onClose: () => voi
   }
 
   async function handleAuthorBlur(): Promise<void> {
+    // Matches on the raw text she types, not a translated key — this fires
+    // the same way no matter what UI language the app is set to.
+    const normalized = author.trim().toLowerCase().replace(/\s+/g, ' ')
+    if (normalized === 'robin hobb') setShowDedication(true)
     if (author === profile.author) return
     useProfilesStore.getState().upsert(await window.api.profiles.setAuthor(profile.name, author))
   }
@@ -116,6 +121,8 @@ function GeneralTab({ profile, onClose }: { profile: Profile; onClose: () => voi
           className="w-full rounded bg-card px-2.5 py-1.5 text-sm text-text outline-none ring-1 ring-transparent focus:ring-accent"
         />
       </div>
+
+      {showDedication && <DedicationModal onClose={() => setShowDedication(false)} />}
 
       <div>
         <label className="mb-1 block text-xs text-subtext">{t('label_status')}</label>
@@ -391,5 +398,17 @@ function NotesTab({ profile }: { profile: Profile }): React.JSX.Element {
         {t('btn_save')}
       </button>
     </div>
+  )
+}
+
+/** A little hidden dedication — not part of the localized UI on purpose. */
+function DedicationModal({ onClose }: { onClose: () => void }): React.JSX.Element {
+  return (
+    <Modal title="A little note" onClose={onClose} width="max-w-sm">
+      <p className="text-center text-sm leading-relaxed text-text">
+        This message is for Marie, my ultimate love. The one that I can&apos;t stop thinking about. The one that
+        loves to read Robin Hobb. ♥
+      </p>
+    </Modal>
   )
 }
