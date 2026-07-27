@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.1.1
+
+### Fixed
+- Bookshelf: a wrapped book title (2+ lines) no longer overlaps the time badge — time now sits below the title instead of beside it
+
 ## v2.1.0 — Capharnaum
 
 Renamed from Book Runners to **Capharnaum**. Same app, same data — nothing about your library changes, and the existing userData folder is unaffected by the rename.

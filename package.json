@@ -1,6 +1,6 @@
 {
   "name": "capharnaum",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Capharnaum — a cozy reading tracker",
   "main": "./out/main/index.js",
   "author": "DarkySpear5",
