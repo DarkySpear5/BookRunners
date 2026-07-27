@@ -57,8 +57,10 @@ const BookRow = memo(function BookRow({
         <span className="shrink-0 rounded bg-card" style={{ width: coverSize, height: coverSize }} />
       )}
       <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${isRunning ? 'bg-green' : 'bg-transparent'}`} />
-      <span className={`min-w-0 flex-1 break-normal ${isRunning ? 'text-green' : 'text-text'}`}>{profile.name}</span>
-      <span className="shrink-0 text-[11px] text-subtext">{formatSeconds(seconds)}</span>
+      <span className="min-w-0 flex-1">
+        <span className={`block break-normal ${isRunning ? 'text-green' : 'text-text'}`}>{profile.name}</span>
+        <span className="block text-[11px] text-subtext">{formatSeconds(seconds)}</span>
+      </span>
     </button>
   )
 })
