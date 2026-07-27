@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal } from '../common/Modal'
 import { EyedropperButton } from '../common/EyedropperButton'
@@ -6,7 +6,6 @@ import { useSettingsStore, updateSettings, updateSettingsOptimistic } from '../.
 import {
   THEMES,
   THEME_ORDER,
-  FONT_CHOICES,
   FONT_SCALE_MIN,
   FONT_SCALE_MAX,
   COVER_SIZE_OPTIONS,
@@ -190,27 +189,13 @@ function AppearanceTab({ settings }: { settings: { theme: ThemeName; customColor
   )
 }
 
-/**
- * One combined font list, not two separate pickers: FONT_CHOICES (curated,
- * cottage-appropriate) plus every font actually installed on this PC —
- * fetched once from main (font-list, via fonts.list IPC) and merged there,
- * so this component just filters/renders whatever comes back. Falls back to
- * the curated list alone if the IPC call hasn't resolved yet.
- */
-function UiTab({ settings }: { settings: { fontFamily: string; fontScale: number; coverSize: number } }): React.JSX.Element {
+// Font family is intentionally not user-configurable here — the app uses a
+// single locked typeface (see settingsStore.ts's applyThemeToDocument()).
+// The fonts:list IPC / systemFonts.ts / font-list dependency are left in
+// place but unreferenced by the UI, since a supporter-only font picker may
+// come back as a future feature.
+function UiTab({ settings }: { settings: { fontScale: number; coverSize: number } }): React.JSX.Element {
   const { t } = useTranslation()
-  const [allFonts, setAllFonts] = useState<string[]>(FONT_CHOICES)
-  const [query, setQuery] = useState('')
-
-  useEffect(() => {
-    void window.api.fonts.list().then(setAllFonts)
-  }, [])
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase()
-    if (!q) return allFonts
-    return allFonts.filter((f) => f.toLowerCase().includes(q))
-  }, [allFonts, query])
 
   return (
     <div className="flex flex-col gap-5">
@@ -230,30 +215,6 @@ function UiTab({ settings }: { settings: { fontFamily: string; fontScale: number
         <div className="flex justify-between text-[11px] text-subtext">
           <span>{t('label_font_size_smallest')}</span>
           <span>{t('label_font_size_largest')}</span>
-        </div>
-      </div>
-      <div>
-        <label className="mb-1 block text-xs text-subtext">{t('label_font')}</label>
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={t('placeholder_search_fonts')}
-          className="mb-1.5 w-full rounded bg-card px-2.5 py-1.5 text-sm text-text outline-none ring-1 ring-transparent focus:ring-accent"
-        />
-        <div className="max-h-40 overflow-y-auto rounded bg-card">
-          {filtered.map((f) => (
-            <button
-              key={f}
-              onClick={() => void updateSettings({ fontFamily: f })}
-              style={{ fontFamily: `"${f}"` }}
-              className={`block w-full px-2.5 py-1.5 text-left text-sm ${
-                settings.fontFamily === f ? 'bg-accent text-bg' : 'text-text hover:bg-panel'
-              }`}
-            >
-              {f}
-            </button>
-          ))}
-          {filtered.length === 0 && <div className="px-2.5 py-2 text-xs text-subtext">—</div>}
         </div>
       </div>
       <div>

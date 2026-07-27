@@ -6,6 +6,8 @@ import { paths } from './paths'
 import { timerEngine } from '../timer/timerEngine'
 import { writeStatusLog } from '../statusLog/writeStatusLog'
 import { todayDateString } from '../util/date'
+import { saveCappedImage } from '../util/imageResize'
+import { COVER_MAX_DIMENSION, BACKGROUND_MAX_DIMENSION } from '@shared/constants'
 import type { Profile, Status } from '@shared/types'
 
 function freshProfile(name: string): Profile {
@@ -109,7 +111,7 @@ export const profileService = {
         newIconFile = `${randomUUID()}${extname(original.iconFile)}`
         try {
           await fs.mkdir(paths.coversDir(), { recursive: true })
-          await fs.copyFile(oldPath, join(paths.coversDir(), newIconFile))
+          await saveCappedImage(oldPath, join(paths.coversDir(), newIconFile), COVER_MAX_DIMENSION)
         } catch {
           newIconFile = null
         }
@@ -123,7 +125,7 @@ export const profileService = {
         newBgImage = `${randomUUID()}${extname(original.bgImage)}`
         try {
           await fs.mkdir(paths.backgroundsDir(), { recursive: true })
-          await fs.copyFile(oldPath, join(paths.backgroundsDir(), newBgImage))
+          await saveCappedImage(oldPath, join(paths.backgroundsDir(), newBgImage), BACKGROUND_MAX_DIMENSION)
         } catch {
           newBgImage = null
         }
@@ -237,7 +239,7 @@ export const profileService = {
     const profile = requireProfile(name)
     await fs.mkdir(paths.coversDir(), { recursive: true })
     const fname = `${randomUUID()}${extname(sourcePath).toLowerCase() || '.png'}`
-    await fs.copyFile(sourcePath, join(paths.coversDir(), fname))
+    await saveCappedImage(sourcePath, join(paths.coversDir(), fname), COVER_MAX_DIMENSION)
     await deleteFileIfExists(profile.iconFile, paths.coversDir())
     profile.iconFile = fname
     await dataStore.safeSave()
@@ -248,7 +250,7 @@ export const profileService = {
     const profile = requireProfile(name)
     await fs.mkdir(paths.backgroundsDir(), { recursive: true })
     const fname = `${randomUUID()}${extname(sourcePath).toLowerCase() || '.png'}`
-    await fs.copyFile(sourcePath, join(paths.backgroundsDir(), fname))
+    await saveCappedImage(sourcePath, join(paths.backgroundsDir(), fname), BACKGROUND_MAX_DIMENSION)
     await deleteFileIfExists(profile.bgImage, paths.backgroundsDir())
     profile.bgImage = fname
     profile.bgColor = null

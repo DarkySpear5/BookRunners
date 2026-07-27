@@ -6,6 +6,8 @@ import { dataStore } from '../store/dataStore'
 import { paths } from '../store/paths'
 import { timerEngine } from '../timer/timerEngine'
 import { writeStatusLog } from '../statusLog/writeStatusLog'
+import { saveCappedImageBuffer } from '../util/imageResize'
+import { COVER_MAX_DIMENSION, BACKGROUND_MAX_DIMENSION } from '@shared/constants'
 import type { BrProfileFile, Profile } from '@shared/types'
 
 /** Single-book export, self-contained (images embedded as base64) — wire-compatible with v1's .brprofile format. */
@@ -48,7 +50,7 @@ export async function exportProfile(win: BrowserWindow, name: string): Promise<{
   await fs.mkdir(paths.profilesDir(), { recursive: true })
   const result = await dialog.showSaveDialog(win, {
     defaultPath: join(paths.profilesDir(), `${profile.name}.brprofile`),
-    filters: [{ name: 'Book Runners Profile', extensions: ['brprofile'] }]
+    filters: [{ name: 'Capharnaum Profile', extensions: ['brprofile'] }]
   })
   if (result.canceled || !result.filePath) return null
 
@@ -62,7 +64,7 @@ export async function importProfile(win: BrowserWindow): Promise<Profile | null>
   const result = await dialog.showOpenDialog(win, {
     defaultPath: paths.profilesDir(),
     filters: [
-      { name: 'Book Runners Profile', extensions: ['brprofile'] },
+      { name: 'Capharnaum Profile', extensions: ['brprofile'] },
       { name: 'All files', extensions: ['*'] }
     ],
     properties: ['openFile']
@@ -85,7 +87,11 @@ export async function importProfile(win: BrowserWindow): Promise<Profile | null>
     try {
       await fs.mkdir(paths.coversDir(), { recursive: true })
       iconFile = `${randomUUID()}${imported.iconExt || '.png'}`
-      await fs.writeFile(join(paths.coversDir(), iconFile), Buffer.from(imported.iconB64, 'base64'))
+      await saveCappedImageBuffer(
+        Buffer.from(imported.iconB64, 'base64'),
+        join(paths.coversDir(), iconFile),
+        COVER_MAX_DIMENSION
+      )
     } catch {
       iconFile = null
     }
@@ -96,7 +102,11 @@ export async function importProfile(win: BrowserWindow): Promise<Profile | null>
     try {
       await fs.mkdir(paths.backgroundsDir(), { recursive: true })
       bgImageFile = `${randomUUID()}${imported.bgImageExt || '.png'}`
-      await fs.writeFile(join(paths.backgroundsDir(), bgImageFile), Buffer.from(imported.bgImageB64, 'base64'))
+      await saveCappedImageBuffer(
+        Buffer.from(imported.bgImageB64, 'base64'),
+        join(paths.backgroundsDir(), bgImageFile),
+        BACKGROUND_MAX_DIMENSION
+      )
     } catch {
       bgImageFile = null
     }

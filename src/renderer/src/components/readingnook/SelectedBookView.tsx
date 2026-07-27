@@ -6,6 +6,14 @@ import { useUiStore } from '../../state/uiStore'
 import { formatSeconds } from '@shared/format'
 import type { Status } from '@shared/types'
 
+// Same accent-tint wash as the global surfaces (tailwind.css's .bg-panel/.bg-card
+// rule), duplicated here in JS because this element's background is set via
+// inline style (profile-specific image/color), which wins the cascade over an
+// external stylesheet rule — without this, a custom background would look
+// untinted next to every other themed surface in the app.
+const ACCENT_WASH =
+  'linear-gradient(color-mix(in srgb, var(--br-accent) 8%, transparent), color-mix(in srgb, var(--br-accent) 8%, transparent))'
+
 export function SelectedBookView(): React.JSX.Element {
   const { t } = useTranslation()
   const selected = useUiStore((s) => s.selected)
@@ -43,13 +51,14 @@ export function SelectedBookView(): React.JSX.Element {
 
   const backgroundStyle: CSSProperties = profile.bgImage
     ? {
-        backgroundImage: `url(br-asset://backgrounds/${encodeURIComponent(profile.bgImage)})`,
+        backgroundImage: `${ACCENT_WASH}, url(br-asset://backgrounds/${encodeURIComponent(profile.bgImage)})`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center'
+        backgroundPosition: 'center',
+        backgroundBlendMode: 'color'
       }
     : profile.bgColor
-      ? { backgroundColor: profile.bgColor }
-      : {}
+      ? { backgroundColor: profile.bgColor, backgroundImage: ACCENT_WASH, backgroundBlendMode: 'color' }
+      : { backgroundImage: ACCENT_WASH, backgroundBlendMode: 'color' }
 
   const hasCustomBackground = !!(profile.bgImage || profile.bgColor)
 

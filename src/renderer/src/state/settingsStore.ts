@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import i18n from '../i18n/i18n'
+import i18n, { loadLanguage } from '../i18n/i18n'
 import type { Settings } from '@shared/types'
 import { THEMES } from '@shared/constants'
 
@@ -17,6 +17,7 @@ export async function loadSettings(): Promise<void> {
   const settings = await window.api.settings.get()
   useSettingsStore.getState().setSettings(settings)
   applyThemeToDocument(settings)
+  await loadLanguage(settings.language)
   void i18n.changeLanguage(settings.language)
 }
 
@@ -24,7 +25,10 @@ export async function updateSettings(patch: Partial<Settings>): Promise<void> {
   const settings = await window.api.settings.update(patch)
   useSettingsStore.getState().setSettings(settings)
   applyThemeToDocument(settings)
-  if (patch.language) void i18n.changeLanguage(patch.language)
+  if (patch.language) {
+    await loadLanguage(patch.language)
+    void i18n.changeLanguage(patch.language)
+  }
 }
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
@@ -66,5 +70,8 @@ export function applyThemeToDocument(settings: Settings): void {
   // (relative to the root <html> font-size), so scaling that one value scales
   // all of them proportionally.
   document.documentElement.style.fontSize = `${16 * settings.fontScale}px`
-  document.body.style.fontFamily = `"${settings.fontFamily}", "Segoe UI", -apple-system, sans-serif`
+  // Font family is intentionally not read from settings — the app uses a
+  // single locked typeface (Quicksand, bundled as a local @font-face in
+  // tailwind.css). settings.fontFamily is kept around unused for a possible
+  // future supporter-only font picker, not applied here.
 }

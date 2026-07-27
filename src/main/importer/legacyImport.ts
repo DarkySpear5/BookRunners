@@ -6,7 +6,14 @@ import { paths } from '../store/paths'
 import { locateLegacyDataFile } from './legacyLocate'
 import { readFirstRunState, writeFirstRunState } from './firstRun'
 import { setRunAtStartup } from '../autostart/autostart'
-import { DEFAULT_CUSTOM_COLORS, THEME_ORDER, THEMES } from '@shared/constants'
+import { saveCappedImage } from '../util/imageResize'
+import {
+  DEFAULT_CUSTOM_COLORS,
+  THEME_ORDER,
+  THEMES,
+  COVER_MAX_DIMENSION,
+  BACKGROUND_MAX_DIMENSION
+} from '@shared/constants'
 import type { LegacyDetectResult, Profile, Settings } from '@shared/types'
 
 /**
@@ -113,11 +120,12 @@ function normalizeLegacySettings(raw: Record<string, unknown> | undefined): Sett
   }
 }
 
-/** Copies an asset in, renaming on collision as defense-in-depth (uuid-based v1 filenames make collisions vanishingly unlikely). */
+/** Copies an asset in (capped to maxDimension), renaming on collision as defense-in-depth (uuid-based v1 filenames make collisions vanishingly unlikely). */
 async function copyAssetIfExists(
   sourcePath: string,
   destDir: string,
-  preferredFileName: string
+  preferredFileName: string,
+  maxDimension: number
 ): Promise<string | null> {
   if (!existsSync(sourcePath)) return null
   await fs.mkdir(destDir, { recursive: true })
@@ -125,7 +133,7 @@ async function copyAssetIfExists(
   if (existsSync(join(destDir, fileName))) {
     fileName = `${randomUUID()}${extname(preferredFileName)}`
   }
-  await fs.copyFile(sourcePath, join(destDir, fileName))
+  await saveCappedImage(sourcePath, join(destDir, fileName), maxDimension)
   return fileName
 }
 
@@ -174,14 +182,16 @@ export async function runLegacyImport(legacyDataFilePath: string): Promise<{ imp
       profile.iconFile = await copyAssetIfExists(
         join(legacyDir, 'covers', profile.iconFile),
         paths.coversDir(),
-        profile.iconFile
+        profile.iconFile,
+        COVER_MAX_DIMENSION
       )
     }
     if (profile.bgImage) {
       profile.bgImage = await copyAssetIfExists(
         join(legacyDir, 'backgrounds', profile.bgImage),
         paths.backgroundsDir(),
-        profile.bgImage
+        profile.bgImage,
+        BACKGROUND_MAX_DIMENSION
       )
     }
 

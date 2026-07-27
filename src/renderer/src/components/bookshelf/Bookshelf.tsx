@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProfilesStore } from '../../state/profilesStore'
 import { useSettingsStore, updateSettings } from '../../state/settingsStore'
@@ -9,16 +9,64 @@ import { formatSeconds } from '@shared/format'
 import { GENRE_OPTIONS } from '@shared/constants'
 import { ContextMenu, type ContextMenuItem } from '../common/ContextMenu'
 import { toast } from '../common/Toast'
-import type { SortMode, Status } from '@shared/types'
+import type { Profile, SortMode, Status } from '@shared/types'
 
 const SIDEBAR_MIN_WIDTH = 240 // the size the panel used to be fixed at
 const SIDEBAR_MAX_WIDTH = 420
+
+/**
+ * Its own narrow `running[name]` selector (instead of the parent subscribing
+ * to the whole record) means a non-running row never re-renders on the
+ * timer's 500ms tick — only the row that's actually running does. memo()
+ * additionally skips a row when Bookshelf re-renders for an unrelated reason
+ * (sort/filter change, another book's rating changing), since profilesStore's
+ * upsert() keeps other profiles' object references stable.
+ */
+const BookRow = memo(function BookRow({
+  profile,
+  isSelected,
+  coverSize,
+  onSelect,
+  onRowContextMenu
+}: {
+  profile: Profile
+  isSelected: boolean
+  coverSize: number
+  onSelect: (name: string) => void
+  onRowContextMenu: (e: React.MouseEvent, name: string) => void
+}): React.JSX.Element {
+  const liveSeconds = useTimerStore((s) => s.running[profile.name])
+  const isRunning = liveSeconds !== undefined
+  const seconds = liveSeconds ?? profile.seconds
+
+  return (
+    <button
+      onClick={() => onSelect(profile.name)}
+      onContextMenu={(e) => onRowContextMenu(e, profile.name)}
+      className={`mb-1 flex w-full items-start gap-2 rounded px-2.5 py-2 text-left text-sm transition-colors ${
+        isSelected ? 'bg-card' : 'hover:bg-card/60'
+      }`}
+    >
+      {profile.iconFile ? (
+        <img
+          src={`br-asset://covers/${encodeURIComponent(profile.iconFile)}`}
+          style={{ width: coverSize, height: coverSize }}
+          className="shrink-0 rounded object-cover"
+        />
+      ) : (
+        <span className="shrink-0 rounded bg-card" style={{ width: coverSize, height: coverSize }} />
+      )}
+      <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${isRunning ? 'bg-green' : 'bg-transparent'}`} />
+      <span className={`min-w-0 flex-1 break-normal ${isRunning ? 'text-green' : 'text-text'}`}>{profile.name}</span>
+      <span className="shrink-0 text-[11px] text-subtext">{formatSeconds(seconds)}</span>
+    </button>
+  )
+})
 
 export function Bookshelf(): React.JSX.Element {
   const { t } = useTranslation()
   const profiles = useProfilesStore((s) => s.profiles)
   const settings = useSettingsStore((s) => s.settings)
-  const running = useTimerStore((s) => s.running)
   const selected = useUiStore((s) => s.selected)
   const contextMenu = useUiStore((s) => s.contextMenu)
   const openContextMenu = useUiStore((s) => s.openContextMenu)
@@ -123,6 +171,19 @@ export function Bookshelf(): React.JSX.Element {
     }
   }
 
+  const handleRowSelect = useCallback((name: string) => {
+    void selectProfile(name)
+  }, [])
+
+  const handleRowContextMenu = useCallback(
+    (e: React.MouseEvent, name: string) => {
+      e.preventDefault()
+      void selectProfile(name)
+      openContextMenu(e.clientX, e.clientY, name)
+    },
+    [openContextMenu]
+  )
+
   function menuItemsFor(name: string): ContextMenuItem[] {
     return [
       { label: t('ctx_modify'), onClick: () => openDialog('modify', name) },
@@ -196,41 +257,16 @@ export function Bookshelf(): React.JSX.Element {
               : t('empty_no_books')}
           </div>
         )}
-        {sorted.map((p) => {
-          const isRunning = p.name in running
-          const seconds = running[p.name] ?? p.seconds
-          const coverSize = settings?.coverSize ?? 36
-          return (
-            <button
-              key={p.name}
-              onClick={() => void selectProfile(p.name)}
-              onContextMenu={(e) => {
-                e.preventDefault()
-                void selectProfile(p.name)
-                openContextMenu(e.clientX, e.clientY, p.name)
-              }}
-              className={`mb-1 flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-sm transition-colors ${
-                selected === p.name ? 'bg-card' : 'hover:bg-card/60'
-              }`}
-            >
-              {p.iconFile ? (
-                <img
-                  src={`br-asset://covers/${encodeURIComponent(p.iconFile)}`}
-                  style={{ width: coverSize, height: coverSize }}
-                  className="shrink-0 rounded object-cover"
-                />
-              ) : (
-                <span
-                  className="shrink-0 rounded bg-card"
-                  style={{ width: coverSize, height: coverSize }}
-                />
-              )}
-              <span className={`h-2 w-2 shrink-0 rounded-full ${isRunning ? 'bg-green' : 'bg-transparent'}`} />
-              <span className={`flex-1 truncate ${isRunning ? 'text-green' : 'text-text'}`}>{p.name}</span>
-              <span className="shrink-0 text-[11px] text-subtext">{formatSeconds(seconds)}</span>
-            </button>
-          )
-        })}
+        {sorted.map((p) => (
+          <BookRow
+            key={p.name}
+            profile={p}
+            isSelected={selected === p.name}
+            coverSize={settings?.coverSize ?? 36}
+            onSelect={handleRowSelect}
+            onRowContextMenu={handleRowContextMenu}
+          />
+        ))}
       </div>
 
       {contextMenu && (

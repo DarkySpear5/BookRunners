@@ -8,6 +8,10 @@ export type ThemeName =
   | 'Sage & Linen'
   | 'Lavender Dusk'
   | 'Warm Oak'
+  | 'Midnight Library'
+  | 'Autumn Pages'
+  | 'Mint Marginalia'
+  | 'Slate Study'
   | 'Custom'
 
 export interface ThemeColors {

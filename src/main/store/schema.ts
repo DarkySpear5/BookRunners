@@ -45,7 +45,18 @@ const ProfileSchema = z
   .transform((p) => ({ ...p, genres: p.genres.length ? p.genres : ['Uncategorized'] }))
 
 const ThemeNameSchema = z
-  .enum(['Cozy Cottage', 'Blush Library', 'Sage & Linen', 'Lavender Dusk', 'Warm Oak', 'Custom'])
+  .enum([
+    'Cozy Cottage',
+    'Blush Library',
+    'Sage & Linen',
+    'Lavender Dusk',
+    'Warm Oak',
+    'Midnight Library',
+    'Autumn Pages',
+    'Mint Marginalia',
+    'Slate Study',
+    'Custom'
+  ])
   .catch('Cozy Cottage')
 
 const SettingsSchema = z.object({

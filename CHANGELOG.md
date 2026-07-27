@@ -1,5 +1,21 @@
 # Changelog
 
+## v2.1.0 — Capharnaum
+
+Renamed from Book Runners to **Capharnaum**. Same app, same data — nothing about your library changes, and the existing userData folder is unaffected by the rename.
+
+### Added
+- 4 new themes — Midnight Library, Autumn Pages, Mint Marginalia, Slate Study (9 built-in themes total, plus Custom)
+- A subtle theme-accent color wash across panels and cards, and rounded theme-colored scrollbars
+- About tab's Built With section is now individually clickable per library, and its description was rewritten to actually describe what the app does
+
+### Changed
+- Book titles on the shelf now wrap at word boundaries onto multiple lines instead of being cut off with "…"
+- The app now uses a single, fixed typeface (Quicksand) instead of a user-selectable font — the font picker has been removed from Settings
+- Cover and background images are now capped to a sane resolution when uploaded or imported, substantially cutting memory usage for libraries with cover art (existing already-saved images are unaffected — only new uploads/imports are capped)
+- Languages other than the active one are no longer loaded until you actually switch to them
+- The bookshelf list only re-renders the row for the book that's actually being read, instead of the whole shelf, while a timer is running
+
 ## v2.0.1
 
 - Added new content in author
