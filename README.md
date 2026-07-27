@@ -1,4 +1,4 @@
-# 📚 Book Runners
+# 📚 Capharnaum
 
 A cozy, offline reading tracker for your personal library — track time spent reading each book, tag genres, rate and review, and keep a warm little "Reading Nook" for whatever you're in the middle of.
 
@@ -17,7 +17,7 @@ Run the installer, click through, done — no admin rights needed. Installs to y
 - Manual "Add Reading Time" for reading done outside the app, with an optional note
 - Duplicate, export (`.brprofile`), and import individual books
 - Custom cover art and a per-book background (solid color or image) behind the Reading Nook
-- Five warm cottage-inspired themes (Cozy Cottage, Blush Library, Sage & Linen, Lavender Dusk, Warm Oak) plus full custom colors, and a font picker covering both a curated list and every font installed on your PC
+- Nine built-in themes (Cozy Cottage, Blush Library, Sage & Linen, Lavender Dusk, Warm Oak, Midnight Library, Autumn Pages, Mint Marginalia, Slate Study) plus full custom colors
 - 10 languages, switchable anytime, no restart needed
 - Optional system tray icon, launch-at-startup, daily rolling backups of your tracked time
 - Everything is stored locally — no account, no internet required except to check for app updates

@@ -24,7 +24,7 @@ export async function writeStatusLog(): Promise<void> {
     const finishedCount = entries.filter(([, p]) => p.status === 'finished').length
 
     const lines: string[] = []
-    lines.push('BOOK RUNNERS — LOG')
+    lines.push('CAPHARNAUM — LOG')
     lines.push(`Last updated: ${timestampString()}`)
     lines.push('')
     lines.push('SUMMARY')

@@ -90,10 +90,10 @@ class TrayService {
     if (runningCount > 1) statusText = `Reading ${runningCount} books`
     else if (selectedIsRunning) statusText = 'Reading…'
     else statusText = 'Paused'
-    this.tray.setToolTip(`Book Runners — ${selected ?? 'No book selected'} (${statusText})`)
+    this.tray.setToolTip(`Capharnaum — ${selected ?? 'No book selected'} (${statusText})`)
 
     const menu = Menu.buildFromTemplate([
-      { label: 'Show Book Runners', click: () => this.callbacks?.onShow() },
+      { label: 'Show Capharnaum', click: () => this.callbacks?.onShow() },
       {
         label: selectedIsRunning ? 'Pause' : 'Read',
         enabled: !!selected,

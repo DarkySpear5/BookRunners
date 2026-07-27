@@ -1,5 +1,5 @@
 appId: com.darkyspear5.bookrunners2
-productName: Book Runners
+productName: Capharnaum
 directories:
   output: release
   buildResources: build
@@ -11,7 +11,7 @@ asarUnpack:
 win:
   target: nsis
   icon: build/icon.ico
-  artifactName: BookRunners-Setup-${version}.exe
+  artifactName: Capharnaum-Setup-${version}.exe
 nsis:
   oneClick: false
   perMachine: false

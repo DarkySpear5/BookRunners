@@ -65,7 +65,7 @@ class DataStore {
     } catch (err) {
       dialog.showErrorBox(
         "Can't save",
-        `Book Runners couldn't save your data.\n\n${err instanceof Error ? err.message : String(err)}`
+        `Capharnaum couldn't save your data.\n\n${err instanceof Error ? err.message : String(err)}`
       )
     }
   }
